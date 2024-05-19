@@ -1,0 +1,156 @@
+﻿@model Dictionary<string, List<NavigationSystem.Models.NavigationCategory>>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Right-to-Left Dropdown Navigation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dropdown-menu .dropdown-menu {
+            left: 100%;
+            top: 0;
+            margin-left: 0.1rem;
+        }
+
+        .dropdown-menu .dropdown-item.dropdown-toggle::after {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: .255em;
+            vertical-align: 0;
+            border-left: .3em solid;
+            border-top: .3em solid transparent;
+            border-bottom: .3em solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Product Categories</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <!-- First Product Category Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productCategoriesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Edit Product Categories
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="productCategoriesDropdown">
+                            @foreach (var categoryGroup in Model)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <a class="edit-button btn btn-sm btn-outline-secondary" href="/Navigations/Edit?categoryName=@categoryGroup.Key">Edit</a>
+                                    <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @categoryGroup.Key
+                                    </a>
+                                </div>
+                                <div class="dropdown-menu">
+                                    @foreach (var category in categoryGroup.Value)
+                                    {
+                                        <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @category.Gender
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                @category.SubCategory
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @category.ClothesTypeCategory
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        @category.ClothesTypeSubCategory
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">@category.ColorCategory</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </li>
+                    <!-- Second Product Category Dropdown (Duplicate Structure) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="productCategoriesDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Product Categories
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="productCategoriesDropdown2">
+                            @foreach (var categoryGroup in Model)
+                            {
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @categoryGroup.Key
+                                </a>
+                                <div class="dropdown-menu">
+                                    @foreach (var category in categoryGroup.Value)
+                                    {
+                                        <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            @category.Gender
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                @category.SubCategory
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @category.ClothesTypeCategory
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        @category.ClothesTypeSubCategory
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">@category.ColorCategory</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </li>
+                    <!-- More categories as needed -->
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+                var $el = $(this);
+                var $parent = $el.offsetParent(".dropdown-menu");
+                if (!$(this).next().hasClass('show')) {
+                    $(this).parents('.dropdown-menu').first().find('.show').removeClass('show');
+                }
+                var $subMenu = $(this).next(".dropdown-menu");
+                $subMenu.toggleClass('show');
+
+                $(this).parent("li").toggleClass('show');
+
+                $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                    $('.dropdown-submenu .show').removeClass("show");
+                });
+
+                if (!$parent.parent().hasClass('navbar-nav')) {
+                    $el.next().css({ "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 });
+                }
+
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>
